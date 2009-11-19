@@ -1,0 +1,19 @@
+ARG_ENABLE(
+  "iniphile"
+, "iniphile extension"
+, "yes"
+);
+
+if (PHP_INIPHILE != "no") {
+  EXTENSION(
+    "iniphile"
+  , "php_iniphile.cpp iniphile.cpp"
+  );
+  AC_DEFINE(
+    'HAVE_INIPHILE'
+  , 1
+  , 'Have iniphile support'
+  );
+}
+
+// vim: ft=javascript sw=4 sts=4 et fdm=marker cms=\ //\ %s
