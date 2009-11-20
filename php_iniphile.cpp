@@ -1,3 +1,7 @@
+// Copyright (c) 2009 Roman Neuhauser
+// Distributed under the MIT license (see LICENSE file)
+// vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
+
 #include "php_iniphile.hpp"
 #include "iniphile.hpp"
 
@@ -137,5 +141,3 @@ extern "C" {
 ZEND_GET_MODULE(iniphile)
 }
 #endif
-
-// vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
