@@ -27,18 +27,15 @@ iniphile_free_storage(void *object TSRMLS_DC) // {{{
     efree(obj);
 } // }}}
 
-zend_object_value
-iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
+static
+void
+init(zend_object *zob, zend_class_entry *type TSRMLS_DC) // {{{
 {
-    phpini *obj = static_cast<phpini *>(
-        emalloc(sizeof(phpini))
-    );
-    memset(obj, 0, sizeof(phpini));
-    obj->std.ce = type;
+    zob->ce = type;
 
-    ALLOC_HASHTABLE(obj->std.properties);
+    ALLOC_HASHTABLE(zob->properties);
     zend_hash_init(
-        obj->std.properties
+        zob->properties
       , 0
       , 0
       , ZVAL_PTR_DTOR
@@ -48,13 +45,26 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
     zval *tmp;
 
     zend_hash_copy(
-        obj->std.properties
-      , &type->default_properties
+        zob->properties
+      , &(zob->ce)->default_properties
       , reinterpret_cast<copy_ctor_func_t>(zval_add_ref)
       , static_cast<void *>(&tmp)
       , sizeof(zval *)
     );
 
+} // }}}
+
+zend_object_value
+iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
+{
+    phpini *obj = static_cast<phpini *>(
+        emalloc(sizeof(phpini))
+    );
+    memset(obj, 0, sizeof(phpini));
+
+    zend_object *zob(&obj->std);
+
+    init(zob, type TSRMLS_CC);
     zend_object_value retval;
 
     retval.handle = zend_objects_store_put(
