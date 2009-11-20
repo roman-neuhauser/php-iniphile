@@ -15,6 +15,11 @@ struct phpini
     iniphile *impl;
 }; // }}}
 
+#define PHPTHIS() \
+    static_cast<phpini *>( \
+        zend_object_store_get_object(getThis() TSRMLS_CC) \
+    )
+
 void
 iniphile_free_storage(void *object TSRMLS_DC) // {{{
 {
@@ -92,17 +97,13 @@ PHP_METHOD(iniphile, __construct) // {{{
         return;
     }
 
-    phpini *obj = static_cast<phpini *>(
-        zend_object_store_get_object(getThis() TSRMLS_CC)
-    );
+    phpini *obj = PHPTHIS();
     obj->impl = new iniphile(path);
 } // }}}
 
 PHP_METHOD(iniphile, path) // {{{
 {
-    phpini *obj = static_cast<phpini *>(
-        zend_object_store_get_object(getThis() TSRMLS_CC)
-    );
+    phpini *obj = PHPTHIS();
     if (0 == obj->impl) {
         RETURN_NULL();
     }
