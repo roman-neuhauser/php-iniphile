@@ -4,13 +4,13 @@
 
 #include "iniphile.hpp"
 
-iniphile::iniphile(std::string const path)
+iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
 {
 }
 
 std::string const
-iniphile::path()
+iniphile_bridge::path()
 {
     return src;
 }

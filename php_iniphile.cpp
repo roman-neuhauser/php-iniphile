@@ -12,7 +12,7 @@ struct phpini
 // {{{
 {
     zend_object std;
-    iniphile *impl;
+    iniphile_bridge *impl;
 }; // }}}
 
 #define PHPTHIS() \
@@ -98,7 +98,7 @@ PHP_METHOD(iniphile, __construct) // {{{
     }
 
     phpini *obj = PHPTHIS();
-    obj->impl = new iniphile(path);
+    obj->impl = new iniphile_bridge(path);
 } // }}}
 
 PHP_METHOD(iniphile, path) // {{{

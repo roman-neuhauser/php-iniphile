@@ -7,10 +7,10 @@
 
 #include <string>
 
-struct iniphile
+struct iniphile_bridge
 {
     explicit
-    iniphile(std::string const path);
+    iniphile_bridge(std::string const path);
     std::string const
     path();
 private:
