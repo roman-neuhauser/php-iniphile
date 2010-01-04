@@ -6,15 +6,22 @@
 #define INIPHILE_HPP
 
 #include <string>
+#include "iniphile/astfwd.hpp"
 
 struct iniphile_bridge
 {
     explicit
     iniphile_bridge(std::string const path);
+    ~iniphile_bridge();
     std::string const
     path();
+    std::string const
+    get_string(std::string const query);
+    bool is_open();
 private:
-    std::string src;
+    std::string const src;
+    iniphile::ast::node *afg;
+    bool open_;
 };
 
 #endif // INIPHILE_HPP

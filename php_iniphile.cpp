@@ -96,11 +96,18 @@ PHP_METHOD(iniphile, __construct) // {{{
     )) {
         return;
     }
-
     phpini *obj = PHPTHIS();
     obj->impl = new iniphile_bridge(path);
 } // }}}
 
+PHP_METHOD(iniphile, is_open) // {{{
+{
+    phpini *obj = PHPTHIS();
+    if (0 == obj->impl) {
+        RETURN_NULL();
+    }
+    RETURN_BOOL(obj->impl->is_open());
+} // }}}
 PHP_METHOD(iniphile, path) // {{{
 {
     phpini *obj = PHPTHIS();
@@ -109,11 +116,26 @@ PHP_METHOD(iniphile, path) // {{{
     }
     RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
 } // }}}
+PHP_METHOD(iniphile, string) // {{{
+{
+    phpini *obj = PHPTHIS();
+    if (0 == obj->impl) {
+        RETURN_NULL();
+    }
+    char *path;
+    int path_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
+        RETURN_NULL();
+    }
+    RETURN_STRING(estrdup(obj->impl->get_string(path).c_str()), 0);
+} // }}}
 
 function_entry iniphile_methods[] = // {{{
 {
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, string, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
