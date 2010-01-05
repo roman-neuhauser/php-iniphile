@@ -13,11 +13,13 @@ iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
 , open_(false)
 {
-    std::ifstream input(path, std::ios_base::binary);
+    std::ifstream input(path.c_str(), std::ios_base::binary);
     input.unsetf(std::ios::skipws);
     std::istreambuf_iterator<char> b(input), e;
 
-    auto cfg = iniphile::parse(b, e, std::cerr);
+    iniphile::parse_result cfg(
+        iniphile::parse(b, e, std::cerr)
+    );
 
     if (!cfg) {
         return;
