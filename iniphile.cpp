@@ -7,6 +7,7 @@
 #include "iniphile.hpp"
 #include "iniphile/input.hpp"
 #include "iniphile/ast.hpp"
+#include "iniphile/output.hpp"
 
 
 iniphile_bridge::iniphile_bridge(std::string const path)
