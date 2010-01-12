@@ -59,8 +59,8 @@ iniphile_bridge::get_bool(std::string const query)
 }
 
 int
-iniphile_bridge::get_int(std::string const query)
+iniphile_bridge::get_long(std::string const query)
 {
     if (!afg) return 0;
-    return iniphile::get(*afg, query, 0);
+    return iniphile::get(*afg, query, long(0));
 }

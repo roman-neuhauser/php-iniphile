@@ -20,7 +20,7 @@ struct iniphile_bridge
     bool
     get_bool(std::string const query);
     int
-    get_int(std::string const query);
+    get_long(std::string const query);
     bool is_open();
 private:
     std::string const src;

@@ -142,7 +142,7 @@ PHP_METHOD(iniphile, get_bool) // {{{
     }
     RETURN_BOOL(obj->impl->get_bool(path));
 } // }}}
-PHP_METHOD(iniphile, get_int) // {{{
+PHP_METHOD(iniphile, get_long) // {{{
 {
     phpini *obj = PHPTHIS();
     if (0 == obj->impl) {
@@ -153,7 +153,7 @@ PHP_METHOD(iniphile, get_int) // {{{
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
         RETURN_NULL();
     }
-    RETURN_LONG(obj->impl->get_int(path));
+    RETURN_LONG(obj->impl->get_long(path));
 } // }}}
 
 function_entry iniphile_methods[] = // {{{
@@ -163,7 +163,7 @@ function_entry iniphile_methods[] = // {{{
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_string, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_bool, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_int, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, get_long, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
