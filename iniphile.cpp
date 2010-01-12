@@ -12,7 +12,6 @@
 
 iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
-, open_(false)
 {
     std::ifstream input(path.c_str(), std::ios_base::binary);
     input.unsetf(std::ios::skipws);
@@ -25,18 +24,18 @@ iniphile_bridge::iniphile_bridge(std::string const path)
         return;
     }
     afg = new iniphile::ast::node(iniphile::normalize(*cfg));
-    open_ = !!input;
 }
 
 iniphile_bridge::~iniphile_bridge()
 {
-    delete afg;
+    if (afg)
+        delete afg;
 }
 
 bool
 iniphile_bridge::is_open()
 {
-    return open_;
+    return !!afg;
 }
 
 std::string const
@@ -48,6 +47,6 @@ iniphile_bridge::path()
 std::string const
 iniphile_bridge::get_string(std::string const query)
 {
-    if (!open_) return "";
+    if (!afg) return "";
     return iniphile::get_string(*afg, query);
 }
