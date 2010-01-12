@@ -50,3 +50,10 @@ iniphile_bridge::get_string(std::string const query)
     if (!afg) return "";
     return iniphile::get_string(*afg, query);
 }
+
+int
+iniphile_bridge::get_int(std::string const query)
+{
+    if (!afg) return 0;
+    return iniphile::get_int(*afg, query);
+}

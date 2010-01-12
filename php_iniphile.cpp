@@ -129,6 +129,19 @@ PHP_METHOD(iniphile, get_string) // {{{
     }
     RETURN_STRING(estrdup(obj->impl->get_string(path).c_str()), 0);
 } // }}}
+PHP_METHOD(iniphile, get_int) // {{{
+{
+    phpini *obj = PHPTHIS();
+    if (0 == obj->impl) {
+        RETURN_NULL();
+    }
+    char *path;
+    int path_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
+        RETURN_NULL();
+    }
+    RETURN_LONG(obj->impl->get_int(path));
+} // }}}
 
 function_entry iniphile_methods[] = // {{{
 {
@@ -136,6 +149,7 @@ function_entry iniphile_methods[] = // {{{
     PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_string, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, get_int, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
