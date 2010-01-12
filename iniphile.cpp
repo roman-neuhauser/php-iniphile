@@ -16,10 +16,9 @@ iniphile_bridge::iniphile_bridge(std::string const path)
 {
     std::ifstream input(path.c_str(), std::ios_base::binary);
     input.unsetf(std::ios::skipws);
-    std::istreambuf_iterator<char> b(input), e;
 
     iniphile::parse_result cfg(
-        iniphile::parse(b, e, std::cerr)
+        iniphile::parse(input, std::cerr)
     );
 
     if (!cfg) {
