@@ -48,12 +48,12 @@ std::string const
 iniphile_bridge::get_string(std::string const query)
 {
     if (!afg) return "";
-    return iniphile::get_string(*afg, query);
+    return iniphile::get(*afg, query, std::string(""));
 }
 
 int
 iniphile_bridge::get_int(std::string const query)
 {
     if (!afg) return 0;
-    return iniphile::get_int(*afg, query);
+    return iniphile::get(*afg, query, 0);
 }
