@@ -51,6 +51,13 @@ iniphile_bridge::get_string(std::string const query)
     return iniphile::get(*afg, query, std::string(""));
 }
 
+bool
+iniphile_bridge::get_bool(std::string const query)
+{
+    if (!afg) return 0;
+    return iniphile::get(*afg, query, false);
+}
+
 int
 iniphile_bridge::get_int(std::string const query)
 {

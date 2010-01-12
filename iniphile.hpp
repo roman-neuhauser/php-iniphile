@@ -17,6 +17,8 @@ struct iniphile_bridge
     path();
     std::string const
     get_string(std::string const query);
+    bool
+    get_bool(std::string const query);
     int
     get_int(std::string const query);
     bool is_open();
