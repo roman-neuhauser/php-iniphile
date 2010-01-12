@@ -116,7 +116,7 @@ PHP_METHOD(iniphile, path) // {{{
     }
     RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
 } // }}}
-PHP_METHOD(iniphile, string) // {{{
+PHP_METHOD(iniphile, get_string) // {{{
 {
     phpini *obj = PHPTHIS();
     if (0 == obj->impl) {
@@ -135,7 +135,7 @@ function_entry iniphile_methods[] = // {{{
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, string, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, get_string, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
