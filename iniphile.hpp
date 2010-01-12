@@ -15,12 +15,12 @@ struct iniphile_bridge
     ~iniphile_bridge();
     std::string const
     path();
-    std::string const
-    get_string(std::string const query);
+    std::string
+    get_string(std::string const query, std::string dflt);
     bool
-    get_bool(std::string const query);
-    int
-    get_long(std::string const query);
+    get_bool(std::string const query, bool dflt);
+    long
+    get_long(std::string const query, long dflt);
     bool is_open();
 private:
     std::string const src;

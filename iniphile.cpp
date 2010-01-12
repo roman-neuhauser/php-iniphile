@@ -44,23 +44,23 @@ iniphile_bridge::path()
     return src;
 }
 
-std::string const
-iniphile_bridge::get_string(std::string const query)
+std::string
+iniphile_bridge::get_string(std::string const query, std::string dflt)
 {
-    if (!afg) return "";
-    return iniphile::get(*afg, query, std::string(""));
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
 }
 
 bool
-iniphile_bridge::get_bool(std::string const query)
+iniphile_bridge::get_bool(std::string const query, bool dflt)
 {
-    if (!afg) return 0;
-    return iniphile::get(*afg, query, false);
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
 }
 
-int
-iniphile_bridge::get_long(std::string const query)
+long
+iniphile_bridge::get_long(std::string const query, long dflt)
 {
-    if (!afg) return 0;
-    return iniphile::get(*afg, query, long(0));
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
 }

@@ -122,12 +122,19 @@ PHP_METHOD(iniphile, get_string) // {{{
     if (0 == obj->impl) {
         RETURN_NULL();
     }
-    char *path;
-    int path_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
+    char *path, *dflt;
+    int path_len, dflt_len;
+    if (FAILURE == zend_parse_parameters(
+        ZEND_NUM_ARGS() TSRMLS_CC
+      , "ss"
+      , &path
+      , &path_len
+      , &dflt
+      , &dflt_len
+    )) {
         RETURN_NULL();
     }
-    RETURN_STRING(estrdup(obj->impl->get_string(path).c_str()), 0);
+    RETURN_STRING(estrdup(obj->impl->get_string(path, dflt).c_str()), 0);
 } // }}}
 PHP_METHOD(iniphile, get_bool) // {{{
 {
@@ -137,10 +144,17 @@ PHP_METHOD(iniphile, get_bool) // {{{
     }
     char *path;
     int path_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
+    zend_bool dflt;
+    if (FAILURE == zend_parse_parameters(
+        ZEND_NUM_ARGS() TSRMLS_CC
+      , "sb"
+      , &path
+      , &path_len
+      , &dflt
+    )) {
         RETURN_NULL();
     }
-    RETURN_BOOL(obj->impl->get_bool(path));
+    RETURN_BOOL(obj->impl->get_bool(path, dflt));
 } // }}}
 PHP_METHOD(iniphile, get_long) // {{{
 {
@@ -150,10 +164,17 @@ PHP_METHOD(iniphile, get_long) // {{{
     }
     char *path;
     int path_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE) {
+    long dflt;
+    if (FAILURE == zend_parse_parameters(
+        ZEND_NUM_ARGS() TSRMLS_CC
+      , "sl"
+      , &path
+      , &path_len
+      , &dflt
+    )) {
         RETURN_NULL();
     }
-    RETURN_LONG(obj->impl->get_long(path));
+    RETURN_LONG(obj->impl->get_long(path, dflt));
 } // }}}
 
 function_entry iniphile_methods[] = // {{{
