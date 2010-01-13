@@ -116,6 +116,42 @@ PHP_METHOD(iniphile, path) // {{{
     }
     RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
 } // }}}
+PHP_METHOD(iniphile, get_strings) // {{{
+{
+    phpini *obj = PHPTHIS();
+    if (0 == obj->impl) {
+        RETURN_NULL();
+    }
+    char *path;
+    int path_len;
+    zval *arr;
+    if (FAILURE == zend_parse_parameters(
+        ZEND_NUM_ARGS() TSRMLS_CC
+      , "sa"
+      , &path
+      , &path_len
+      , &arr
+    )) {
+        RETURN_NULL();
+    }
+    typedef std::vector<std::string> Strings;
+    zval **elm;
+    HashPosition i;
+    HashTable *hash = Z_ARRVAL_P(arr);
+    Strings dv(zend_hash_num_elements(hash));
+    for (
+        zend_hash_internal_pointer_reset_ex(hash, &i);
+        SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
+        zend_hash_move_forward_ex(hash, &i)
+    ) {
+        dv.push_back(Z_STRVAL_PP(elm));
+    }
+    Strings rv(obj->impl->get_strings(path, dv));
+    array_init(return_value);
+    for (int i = 0; i < rv.size(); ++i) {
+        add_next_index_string(return_value, estrdup(rv[i].c_str()), 0);
+    }
+} // }}}
 PHP_METHOD(iniphile, get_string) // {{{
 {
     phpini *obj = PHPTHIS();
@@ -182,6 +218,7 @@ function_entry iniphile_methods[] = // {{{
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, get_strings, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_string, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_bool, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get_long, 0, ZEND_ACC_PUBLIC)

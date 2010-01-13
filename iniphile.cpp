@@ -44,6 +44,13 @@ iniphile_bridge::path()
     return src;
 }
 
+std::vector<std::string>
+iniphile_bridge::get_strings(std::string const query, std::vector<std::string> dflt)
+{
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
+}
+
 std::string
 iniphile_bridge::get_string(std::string const query, std::string dflt)
 {

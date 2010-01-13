@@ -6,6 +6,7 @@
 #define INIPHILE_HPP
 
 #include <string>
+#include <vector>
 #include "iniphile/astfwd.hpp"
 
 struct iniphile_bridge
@@ -15,6 +16,8 @@ struct iniphile_bridge
     ~iniphile_bridge();
     std::string const
     path();
+    std::vector<std::string>
+    get_strings(std::string const query, std::vector<std::string> dflt);
     std::string
     get_string(std::string const query, std::string dflt);
     bool
