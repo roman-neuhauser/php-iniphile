@@ -71,3 +71,10 @@ iniphile_bridge::get_long(std::string const query, long dflt)
     if (!afg) return dflt;
     return iniphile::get(*afg, query, dflt);
 }
+
+double
+iniphile_bridge::get_double(std::string const query, double dflt)
+{
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
+}

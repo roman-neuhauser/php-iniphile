@@ -24,6 +24,8 @@ struct iniphile_bridge
     get_bool(std::string const query, bool dflt);
     long
     get_long(std::string const query, long dflt);
+    double
+    get_double(std::string const query, double dflt);
     bool is_open();
 private:
     std::string const src;
