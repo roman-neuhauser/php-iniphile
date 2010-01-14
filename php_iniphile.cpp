@@ -103,25 +103,16 @@ PHP_METHOD(iniphile, __construct) // {{{
 PHP_METHOD(iniphile, is_open) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     RETURN_BOOL(obj->impl->is_open());
 } // }}}
 PHP_METHOD(iniphile, path) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
 } // }}}
 PHP_METHOD(iniphile, get_strings) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     char *path;
     int path_len;
     zval *arr;
@@ -155,9 +146,6 @@ PHP_METHOD(iniphile, get_strings) // {{{
 PHP_METHOD(iniphile, get_string) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     char *path, *dflt;
     int path_len, dflt_len;
     if (FAILURE == zend_parse_parameters(
@@ -175,9 +163,6 @@ PHP_METHOD(iniphile, get_string) // {{{
 PHP_METHOD(iniphile, get_bool) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     char *path;
     int path_len;
     zend_bool dflt;
@@ -195,9 +180,6 @@ PHP_METHOD(iniphile, get_bool) // {{{
 PHP_METHOD(iniphile, get_long) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     char *path;
     int path_len;
     long dflt;
@@ -215,9 +197,6 @@ PHP_METHOD(iniphile, get_long) // {{{
 PHP_METHOD(iniphile, get_double) // {{{
 {
     phpini *obj = PHPTHIS();
-    if (0 == obj->impl) {
-        RETURN_NULL();
-    }
     char *path;
     int path_len;
     double dflt;
