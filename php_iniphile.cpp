@@ -93,7 +93,8 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
     zval **elm;
     HashPosition i;
     HashTable *hash = Z_ARRVAL_P(src);
-    Strings dv(zend_hash_num_elements(hash));
+    Strings dv;
+    dv.reserve(zend_hash_num_elements(hash));
     for (
         zend_hash_internal_pointer_reset_ex(hash, &i);
         SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
