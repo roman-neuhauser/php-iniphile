@@ -83,6 +83,29 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
     return retval;
 } // }}}
 
+static
+void
+get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
+{
+    typedef std::vector<std::string> Strings;
+    zval **elm;
+    HashPosition i;
+    HashTable *hash = Z_ARRVAL_P(src);
+    Strings dv(zend_hash_num_elements(hash));
+    for (
+        zend_hash_internal_pointer_reset_ex(hash, &i);
+        SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
+        zend_hash_move_forward_ex(hash, &i)
+    ) {
+        dv.push_back(Z_STRVAL_PP(elm));
+    }
+    Strings rv(obj->impl->get(path, dv));
+    array_init(dst);
+    for (int i = 0; i < rv.size(); ++i) {
+        add_next_index_string(dst, estrdup(rv[i].c_str()), 0);
+    }
+} // }}}
+
 PHP_METHOD(iniphile, __construct) // {{{
 {
     char *path;
@@ -110,106 +133,33 @@ PHP_METHOD(iniphile, path) // {{{
     phpini *obj = PHPTHIS();
     RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
 } // }}}
-PHP_METHOD(iniphile, get_strings) // {{{
+PHP_METHOD(iniphile, get) // {{{
 {
     phpini *obj = PHPTHIS();
     char *path;
     int path_len;
-    zval *arr;
+    zval *dflt;
     if (FAILURE == zend_parse_parameters(
         ZEND_NUM_ARGS() TSRMLS_CC
-      , "sa"
-      , &path
-      , &path_len
-      , &arr
-    )) {
-        RETURN_NULL();
-    }
-    typedef std::vector<std::string> Strings;
-    zval **elm;
-    HashPosition i;
-    HashTable *hash = Z_ARRVAL_P(arr);
-    Strings dv(zend_hash_num_elements(hash));
-    for (
-        zend_hash_internal_pointer_reset_ex(hash, &i);
-        SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
-        zend_hash_move_forward_ex(hash, &i)
-    ) {
-        dv.push_back(Z_STRVAL_PP(elm));
-    }
-    Strings rv(obj->impl->get(path, dv));
-    array_init(return_value);
-    for (int i = 0; i < rv.size(); ++i) {
-        add_next_index_string(return_value, estrdup(rv[i].c_str()), 0);
-    }
-} // }}}
-PHP_METHOD(iniphile, get_string) // {{{
-{
-    phpini *obj = PHPTHIS();
-    char *path, *dflt;
-    int path_len, dflt_len;
-    if (FAILURE == zend_parse_parameters(
-        ZEND_NUM_ARGS() TSRMLS_CC
-      , "ss"
-      , &path
-      , &path_len
-      , &dflt
-      , &dflt_len
-    )) {
-        RETURN_NULL();
-    }
-    RETURN_STRING(estrdup(obj->impl->get(path, std::string(dflt)).c_str()), 0);
-} // }}}
-PHP_METHOD(iniphile, get_bool) // {{{
-{
-    phpini *obj = PHPTHIS();
-    char *path;
-    int path_len;
-    zend_bool dflt;
-    if (FAILURE == zend_parse_parameters(
-        ZEND_NUM_ARGS() TSRMLS_CC
-      , "sb"
+      , "sz"
       , &path
       , &path_len
       , &dflt
     )) {
         RETURN_NULL();
     }
-    RETURN_BOOL(obj->impl->get(path, !!dflt));
-} // }}}
-PHP_METHOD(iniphile, get_long) // {{{
-{
-    phpini *obj = PHPTHIS();
-    char *path;
-    int path_len;
-    long dflt;
-    if (FAILURE == zend_parse_parameters(
-        ZEND_NUM_ARGS() TSRMLS_CC
-      , "sl"
-      , &path
-      , &path_len
-      , &dflt
-    )) {
-        RETURN_NULL();
+    switch (Z_TYPE_P(dflt)) {
+    case IS_BOOL:
+        RETURN_BOOL(obj->impl->get(path, !!Z_LVAL_P(dflt)));
+    case IS_LONG:
+        RETURN_LONG(obj->impl->get(path, Z_LVAL_P(dflt)));
+    case IS_DOUBLE:
+        RETURN_DOUBLE(obj->impl->get(path, Z_DVAL_P(dflt)));
+    case IS_STRING:
+        RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(dflt))).c_str()), 0);
+    case IS_ARRAY:
+        get_strings(return_value, dflt, obj, path);
     }
-    RETURN_LONG(obj->impl->get(path, dflt));
-} // }}}
-PHP_METHOD(iniphile, get_double) // {{{
-{
-    phpini *obj = PHPTHIS();
-    char *path;
-    int path_len;
-    double dflt;
-    if (FAILURE == zend_parse_parameters(
-        ZEND_NUM_ARGS() TSRMLS_CC
-      , "sd"
-      , &path
-      , &path_len
-      , &dflt
-    )) {
-        RETURN_NULL();
-    }
-    RETURN_DOUBLE(obj->impl->get(path, dflt));
 } // }}}
 
 function_entry iniphile_methods[] = // {{{
@@ -217,11 +167,7 @@ function_entry iniphile_methods[] = // {{{
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_strings, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_string, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_bool, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_long, 0, ZEND_ACC_PUBLIC)
-    PHP_ME(iniphile, get_double, 0, ZEND_ACC_PUBLIC)
+    PHP_ME(iniphile, get, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
