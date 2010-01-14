@@ -5,6 +5,8 @@
 #include "php_iniphile.hpp"
 #include "iniphile.hpp"
 
+#include "zend_exceptions.h"
+
 zend_class_entry *iniphile_ce;
 zend_object_handlers iniphile_object_handlers;
 
@@ -117,16 +119,25 @@ PHP_METHOD(iniphile, __construct) // {{{
       , &path
       , &pathlen
     )) {
+        zend_throw_exception(
+            zend_exception_get_default(TSRMLS_C)
+          , "Parameter parsing failure"
+          , 0 TSRMLS_CC
+        );
         return;
     }
-    phpini *obj = PHPTHIS();
-    obj->impl = new iniphile_bridge(path);
-} // }}}
 
-PHP_METHOD(iniphile, is_open) // {{{
-{
     phpini *obj = PHPTHIS();
-    RETURN_BOOL(obj->impl->is_open());
+    try {
+        obj->impl = new iniphile_bridge(path);
+    } catch (std::exception &e) {
+        zend_throw_exception_ex(
+            zend_exception_get_default(TSRMLS_C)
+          , 0 TSRMLS_CC
+          , "'%s' could not be open"
+          , path
+        );
+    }
 } // }}}
 PHP_METHOD(iniphile, path) // {{{
 {
@@ -165,7 +176,6 @@ PHP_METHOD(iniphile, get) // {{{
 function_entry iniphile_methods[] = // {{{
 {
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME(iniphile, is_open, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}

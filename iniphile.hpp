@@ -16,7 +16,6 @@ struct iniphile_bridge
     ~iniphile_bridge();
     std::string const
     path();
-    bool is_open();
 
     template<class T>
     T

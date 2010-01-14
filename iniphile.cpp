@@ -3,26 +3,37 @@
 // vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
 
 #include <fstream>
+#include <exception>
 
 #include "iniphile.hpp"
 #include "iniphile/input.hpp"
 #include "iniphile/ast.hpp"
 #include "iniphile/output.hpp"
 
+struct iniphile_bridge_error
+: public virtual std::exception
+{
+    virtual
+    char const *what() const throw()
+    {
+        return "OMG";
+    }
+};
 
 iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
 {
     std::ifstream input(path.c_str(), std::ios_base::binary);
+    if (!input)
+        throw iniphile_bridge_error();
     input.unsetf(std::ios::skipws);
 
     iniphile::parse_result cfg(
         iniphile::parse(input, std::cerr)
     );
+    if (!cfg)
+        throw iniphile_bridge_error();
 
-    if (!cfg) {
-        return;
-    }
     afg = new iniphile::ast::node(iniphile::normalize(*cfg));
 }
 
@@ -30,12 +41,6 @@ iniphile_bridge::~iniphile_bridge()
 {
     if (afg)
         delete afg;
-}
-
-bool
-iniphile_bridge::is_open()
-{
-    return !!afg;
 }
 
 std::string const
@@ -48,7 +53,6 @@ template<class T>
 T
 iniphile_bridge::get(std::string const query, T dflt)
 {
-    if (!afg) return dflt;
     return iniphile::get(*afg, query, dflt);
 }
 
