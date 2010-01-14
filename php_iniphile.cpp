@@ -180,6 +180,9 @@ PHP_METHOD(iniphile, get) // {{{
     char *path;
     int path_len;
     zval *dflt;
+    PHPINI_EH_DECL;
+
+    PHPINI_EH_THROWING;
     if (FAILURE == zend_parse_parameters(
         ZEND_NUM_ARGS() TSRMLS_CC
       , "sz"
@@ -187,8 +190,11 @@ PHP_METHOD(iniphile, get) // {{{
       , &path_len
       , &dflt
     )) {
-        RETURN_NULL();
+        PHPINI_EH_NORMAL;
+        return;
     }
+    PHPINI_EH_NORMAL;
+
     switch (Z_TYPE_P(dflt)) {
     case IS_BOOL:
         RETURN_BOOL(obj->impl->get(path, !!Z_LVAL_P(dflt)));
