@@ -200,6 +200,9 @@ PHP_METHOD(iniphile, get) // {{{
         RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(dflt))).c_str()), 0);
     case IS_ARRAY:
         get_strings(return_value, dflt, obj, path);
+        break;
+    default:
+        PHPINI_THROW("Unsupported value type");
     }
 } // }}}
 
