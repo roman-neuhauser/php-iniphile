@@ -108,24 +108,53 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
     }
 } // }}}
 
+#define PHPINI_THROW(m) \
+    zend_throw_exception( \
+        zend_exception_get_default(TSRMLS_C) \
+      , m \
+      , 0 TSRMLS_CC \
+    );
+
+#if ZEND_MODULE_API_NO >= 20090626
+
+#define PHPINI_EH_DECL zend_error_handling error_handling
+#define PHPINI_EH_THROWING \
+	zend_replace_error_handling( \
+        EH_THROW \
+      , NULL \
+      , &error_handling TSRMLS_CC \
+    )
+#define PHPINI_EH_NORMAL zend_restore_error_handling(&error_handling TSRMLS_CC)
+
+#else
+
+#define PHPINI_EH_DECL
+#define PHPINI_EH_THROWING \
+	php_set_error_handling( \
+        EH_THROW \
+      , zend_exception_get_default(TSRMLS_C) TSRMLS_CC \
+    )
+#define PHPINI_EH_NORMAL php_std_error_handling()
+
+#endif
+
 PHP_METHOD(iniphile, __construct) // {{{
 {
     char *path;
     int pathlen;
+    PHPINI_EH_DECL;
 
+    PHPINI_EH_THROWING;
     if (FAILURE == zend_parse_parameters(
         ZEND_NUM_ARGS() TSRMLS_CC
       , "s"
       , &path
       , &pathlen
     )) {
-        zend_throw_exception(
-            zend_exception_get_default(TSRMLS_C)
-          , "Parameter parsing failure"
-          , 0 TSRMLS_CC
-        );
+        PHPINI_EH_NORMAL;
         return;
     }
+    PHPINI_EH_NORMAL;
 
     phpini *obj = PHPTHIS();
     try {
