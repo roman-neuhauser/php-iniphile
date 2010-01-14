@@ -17,6 +17,6 @@ extern "C" {
 }
 
 extern zend_module_entry iniphile_module_entry;
-#define phpext_iniphile_ptr &iniphile_module_entry;
+#define phpext_iniphile_ptr &iniphile_module_entry
 
 #endif // PHP_INIPHILE_HPP
