@@ -146,7 +146,7 @@ PHP_METHOD(iniphile, get_strings) // {{{
     ) {
         dv.push_back(Z_STRVAL_PP(elm));
     }
-    Strings rv(obj->impl->get_strings(path, dv));
+    Strings rv(obj->impl->get(path, dv));
     array_init(return_value);
     for (int i = 0; i < rv.size(); ++i) {
         add_next_index_string(return_value, estrdup(rv[i].c_str()), 0);
@@ -170,7 +170,7 @@ PHP_METHOD(iniphile, get_string) // {{{
     )) {
         RETURN_NULL();
     }
-    RETURN_STRING(estrdup(obj->impl->get_string(path, dflt).c_str()), 0);
+    RETURN_STRING(estrdup(obj->impl->get(path, std::string(dflt)).c_str()), 0);
 } // }}}
 PHP_METHOD(iniphile, get_bool) // {{{
 {
@@ -190,7 +190,7 @@ PHP_METHOD(iniphile, get_bool) // {{{
     )) {
         RETURN_NULL();
     }
-    RETURN_BOOL(obj->impl->get_bool(path, dflt));
+    RETURN_BOOL(obj->impl->get(path, !!dflt));
 } // }}}
 PHP_METHOD(iniphile, get_long) // {{{
 {
@@ -210,7 +210,7 @@ PHP_METHOD(iniphile, get_long) // {{{
     )) {
         RETURN_NULL();
     }
-    RETURN_LONG(obj->impl->get_long(path, dflt));
+    RETURN_LONG(obj->impl->get(path, dflt));
 } // }}}
 PHP_METHOD(iniphile, get_double) // {{{
 {
@@ -230,7 +230,7 @@ PHP_METHOD(iniphile, get_double) // {{{
     )) {
         RETURN_NULL();
     }
-    RETURN_DOUBLE(obj->impl->get_double(path, dflt));
+    RETURN_DOUBLE(obj->impl->get(path, dflt));
 } // }}}
 
 function_entry iniphile_methods[] = // {{{

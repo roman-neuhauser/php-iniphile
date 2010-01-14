@@ -16,17 +16,11 @@ struct iniphile_bridge
     ~iniphile_bridge();
     std::string const
     path();
-    std::vector<std::string>
-    get_strings(std::string const query, std::vector<std::string> dflt);
-    std::string
-    get_string(std::string const query, std::string dflt);
-    bool
-    get_bool(std::string const query, bool dflt);
-    long
-    get_long(std::string const query, long dflt);
-    double
-    get_double(std::string const query, double dflt);
     bool is_open();
+
+    template<class T>
+    T
+    get(std::string const query, T dflt);
 private:
     std::string const src;
     iniphile::ast::node *afg;

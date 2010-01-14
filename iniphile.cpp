@@ -44,37 +44,31 @@ iniphile_bridge::path()
     return src;
 }
 
+template<class T>
+T
+iniphile_bridge::get(std::string const query, T dflt)
+{
+    if (!afg) return dflt;
+    return iniphile::get(*afg, query, dflt);
+}
+
+template
 std::vector<std::string>
-iniphile_bridge::get_strings(std::string const query, std::vector<std::string> dflt)
-{
-    if (!afg) return dflt;
-    return iniphile::get(*afg, query, dflt);
-}
+iniphile_bridge::get< std::vector<std::string> >(std::string const query, std::vector<std::string> dflt);
 
+template
 std::string
-iniphile_bridge::get_string(std::string const query, std::string dflt)
-{
-    if (!afg) return dflt;
-    return iniphile::get(*afg, query, dflt);
-}
+iniphile_bridge::get<std::string>(std::string const query, std::string dflt);
 
+template
 bool
-iniphile_bridge::get_bool(std::string const query, bool dflt)
-{
-    if (!afg) return dflt;
-    return iniphile::get(*afg, query, dflt);
-}
+iniphile_bridge::get<bool>(std::string const query, bool dflt);
 
+template
 long
-iniphile_bridge::get_long(std::string const query, long dflt)
-{
-    if (!afg) return dflt;
-    return iniphile::get(*afg, query, dflt);
-}
+iniphile_bridge::get<long>(std::string const query, long dflt);
 
+template
 double
-iniphile_bridge::get_double(std::string const query, double dflt)
-{
-    if (!afg) return dflt;
-    return iniphile::get(*afg, query, dflt);
-}
+iniphile_bridge::get<double>(std::string const query, double dflt);
+
