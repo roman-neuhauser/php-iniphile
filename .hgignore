@@ -19,6 +19,7 @@ config.{log,nice,status,sub}
 configure{,.in}
 *.la
 *.lo
+*.o
 install-sh
 libtool
 ltmain.sh
@@ -26,3 +27,8 @@ missing
 mkinstalldirs
 modules/
 run-tests.php
+tests/*.diff
+tests/*.exp
+tests/*.log
+tests/*.out
+tests/*.php
