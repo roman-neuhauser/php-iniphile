@@ -22,6 +22,36 @@ struct phpini
         zend_object_store_get_object(getThis() TSRMLS_CC) \
     )
 
+#define PHPINI_THROW(m) \
+    zend_throw_exception( \
+        zend_exception_get_default(TSRMLS_C) \
+      , m \
+      , 0 TSRMLS_CC \
+    );
+
+#if ZEND_MODULE_API_NO >= 20090626
+
+#define PHPINI_EH_DECL zend_error_handling error_handling
+#define PHPINI_EH_THROWING \
+	zend_replace_error_handling( \
+        EH_THROW \
+      , NULL \
+      , &error_handling TSRMLS_CC \
+    )
+#define PHPINI_EH_NORMAL zend_restore_error_handling(&error_handling TSRMLS_CC)
+
+#else
+
+#define PHPINI_EH_DECL
+#define PHPINI_EH_THROWING \
+	php_set_error_handling( \
+        EH_THROW \
+      , zend_exception_get_default(TSRMLS_C) TSRMLS_CC \
+    )
+#define PHPINI_EH_NORMAL php_std_error_handling()
+
+#endif
+
 void
 iniphile_free_storage(void *object TSRMLS_DC) // {{{
 {
@@ -87,6 +117,19 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
 
 static
 void
+phpini_convert_to_string(zval *dst, zval *src) // {{{
+{
+    *dst = *src;
+    zval_copy_ctor(dst);
+    PHPINI_EH_DECL;
+
+    PHPINI_EH_THROWING;
+    convert_to_string(dst);
+    PHPINI_EH_NORMAL;
+} // }}}
+
+static
+void
 get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
 {
     typedef std::vector<std::string> Strings;
@@ -100,7 +143,9 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
         SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
         zend_hash_move_forward_ex(hash, &i)
     ) {
-        dv.push_back(Z_STRVAL_PP(elm));
+        zval temp;
+        phpini_convert_to_string(&temp, *elm);
+        dv.push_back(Z_STRVAL(temp));
     }
     Strings rv(obj->impl->get(path, dv));
     array_init(dst);
@@ -108,36 +153,6 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
         add_next_index_string(dst, estrdup(rv[i].c_str()), 0);
     }
 } // }}}
-
-#define PHPINI_THROW(m) \
-    zend_throw_exception( \
-        zend_exception_get_default(TSRMLS_C) \
-      , m \
-      , 0 TSRMLS_CC \
-    );
-
-#if ZEND_MODULE_API_NO >= 20090626
-
-#define PHPINI_EH_DECL zend_error_handling error_handling
-#define PHPINI_EH_THROWING \
-	zend_replace_error_handling( \
-        EH_THROW \
-      , NULL \
-      , &error_handling TSRMLS_CC \
-    )
-#define PHPINI_EH_NORMAL zend_restore_error_handling(&error_handling TSRMLS_CC)
-
-#else
-
-#define PHPINI_EH_DECL
-#define PHPINI_EH_THROWING \
-	php_set_error_handling( \
-        EH_THROW \
-      , zend_exception_get_default(TSRMLS_C) TSRMLS_CC \
-    )
-#define PHPINI_EH_NORMAL php_std_error_handling()
-
-#endif
 
 PHP_METHOD(iniphile, __construct) // {{{
 {
@@ -212,6 +227,11 @@ PHP_METHOD(iniphile, get) // {{{
         RETURN_DOUBLE(obj->impl->get(path, Z_DVAL_P(dflt)));
     case IS_STRING:
         RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(dflt))).c_str()), 0);
+    case IS_OBJECT: {
+        zval temp;
+        phpini_convert_to_string(&temp, dflt);
+        RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL(temp))).c_str()), 0);
+    }
     case IS_ARRAY:
         get_strings(return_value, dflt, obj, path);
         break;
