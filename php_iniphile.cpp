@@ -160,12 +160,20 @@ PHP_METHOD(iniphile, __construct) // {{{
     phpini *obj = PHPTHIS();
     try {
         obj->impl = new iniphile_bridge(path);
-    } catch (std::exception &e) {
+    } catch (iniphile_errors::stream_error &e) {
         zend_throw_exception_ex(
             zend_exception_get_default(TSRMLS_C)
           , 0 TSRMLS_CC
           , "'%s' could not be open"
           , path
+        );
+    } catch (iniphile_errors::syntax_error &e) {
+        zend_throw_exception_ex(
+            zend_exception_get_default(TSRMLS_C)
+          , 0 TSRMLS_CC
+          , "Syntax error in '%s': %s"
+          , path
+          , e.what()
         );
     }
 } // }}}

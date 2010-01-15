@@ -3,36 +3,55 @@
 // vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
 
 #include <fstream>
-#include <exception>
 
 #include "iniphile.hpp"
 #include "iniphile/input.hpp"
 #include "iniphile/ast.hpp"
 #include "iniphile/output.hpp"
 
-struct iniphile_bridge_error
-: public virtual std::exception
+namespace iniphile_errors
 {
-    virtual
-    char const *what() const throw()
-    {
-        return "OMG";
-    }
-};
+
+stream_error::stream_error(std::string const &msg)
+: msg(msg)
+{}
+
+char const *
+stream_error::what() const throw()
+{
+    return msg.c_str();
+}
+
+stream_error::~stream_error() throw() {}
+
+syntax_error::syntax_error(std::string const &msg)
+: msg(msg)
+{}
+
+char const *
+syntax_error::what() const throw()
+{
+    return msg.c_str();
+}
+
+syntax_error::~syntax_error() throw() {}
+
+} // namespace iniphile_errors
 
 iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
 {
     std::ifstream input(path.c_str(), std::ios_base::binary);
     if (!input)
-        throw iniphile_bridge_error();
+        throw iniphile_errors::stream_error(path);
     input.unsetf(std::ios::skipws);
 
+    std::ostringstream erros;
     iniphile::parse_result cfg(
-        iniphile::parse(input, std::cerr)
+        iniphile::parse(input, erros)
     );
     if (!cfg)
-        throw iniphile_bridge_error();
+        throw iniphile_errors::syntax_error(erros.str());
 
     afg = new iniphile::ast::node(iniphile::normalize(*cfg));
 }
