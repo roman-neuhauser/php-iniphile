@@ -75,23 +75,12 @@ iniphile_bridge::get(std::string const query, T dflt)
     return iniphile::get(*afg, query, dflt);
 }
 
-template
-std::vector<std::string>
-iniphile_bridge::get< std::vector<std::string> >(std::string const query, std::vector<std::string> dflt);
+#define INIPHILE_BRIDGE_GET_SPEC(T) \
+    template T iniphile_bridge::get< T >(std::string const query, T dflt);
 
-template
-std::string
-iniphile_bridge::get<std::string>(std::string const query, std::string dflt);
-
-template
-bool
-iniphile_bridge::get<bool>(std::string const query, bool dflt);
-
-template
-long
-iniphile_bridge::get<long>(std::string const query, long dflt);
-
-template
-double
-iniphile_bridge::get<double>(std::string const query, double dflt);
+INIPHILE_BRIDGE_GET_SPEC(std::vector<std::string>);
+INIPHILE_BRIDGE_GET_SPEC(std::string);
+INIPHILE_BRIDGE_GET_SPEC(bool);
+INIPHILE_BRIDGE_GET_SPEC(long);
+INIPHILE_BRIDGE_GET_SPEC(double);
 
