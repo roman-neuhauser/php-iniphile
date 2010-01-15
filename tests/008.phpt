@@ -5,10 +5,28 @@ iniphile::get() default type decides return type
 --FILE--
 <?php
 
+function t($v)
+{
+    $t = gettype($v);
+    return 'array' != $t
+        ? $t
+        : sprintf(
+            '%s<%s>'
+          , $t
+          , sizeof($v) ? gettype($v[0]) : ''
+        )
+    ;
+}
+
 function c(iniphile $ini, $q)
 {
-    foreach (array('', 0, 0.0, false, array()) as $dflt)
-        var_dump($ini->get($q, $dflt));
+    foreach (array('', 0, 0.0, false, array()) as $dflt) {
+        printf(
+            "%s -> %s\n"
+          , t($dflt)
+          , t($ini->get($q, $dflt))
+        );
+    }
     echo "\n";
 }
 
@@ -23,56 +41,38 @@ c($ini, 'booleans3.ok');
 
 ?>
 --EXPECT--	
-string(4) "this"
-int(0)
-float(0)
-bool(false)
-array(1) {
-  [0]=>
-  string(4) "this"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
 
-string(2) "42"
-int(42)
-float(42)
-bool(false)
-array(1) {
-  [0]=>
-  string(2) "42"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
 
-string(3) "6.9"
-int(6)
-float(6.9)
-bool(false)
-array(1) {
-  [0]=>
-  string(3) "6.9"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
 
-string(4) "true"
-int(0)
-float(0)
-bool(true)
-array(1) {
-  [0]=>
-  string(4) "true"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
 
-string(3) "yes"
-int(0)
-float(0)
-bool(true)
-array(1) {
-  [0]=>
-  string(3) "yes"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
 
-string(1) "1"
-int(1)
-float(1)
-bool(true)
-array(1) {
-  [0]=>
-  string(1) "1"
-}
+string -> string
+integer -> integer
+double -> double
+boolean -> boolean
+array<> -> array<string>
