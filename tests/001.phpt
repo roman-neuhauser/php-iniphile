@@ -1,15 +1,16 @@
 --TEST--
-iniphile smoketest
+construction with nonexistent path throws
 --SKIPIF--
 <?php if (!extension_loaded("iniphile")) print "skip"; ?>
 --FILE--
 <?php
 
-$ini = new iniphile("rofl.ini");
-var_dump($ini->path());
+try {
+    $ini = new iniphile(dirname(__FILE__) . "/nonexistent");
+} catch (Exception $e) {
+    echo "ok";
+}
 
-echo "Done\n";
 ?>
 --EXPECTF--	
-string(8) "rofl.ini"
-Done
+ok
