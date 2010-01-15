@@ -16,6 +16,7 @@ c($ini, 0);
 c($ini, 0.0);
 c($ini, false);
 c($ini, "foo");
+c($ini, array());
 
 ?>
 --EXPECT--	
@@ -23,3 +24,5 @@ int(0)
 float(0)
 bool(false)
 string(3) "foo"
+array(0) {
+}
