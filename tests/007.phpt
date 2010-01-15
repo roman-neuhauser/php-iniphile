@@ -1,5 +1,5 @@
 --TEST--
-iniphile::get() default value pass-through, objects without __toString()
+iniphile::get() default value: objects w/0 __toString() cause exception, not notice
 --SKIPIF--
 <?php if (!extension_loaded("iniphile")) print "skip"; ?>
 --FILE--
