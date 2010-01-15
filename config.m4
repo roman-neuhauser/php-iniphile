@@ -1,6 +1,6 @@
 PHP_ARG_ENABLE(
   iniphile,
-  [Whether to enable the iniphile extension],
+  [whether to enable the iniphile extension],
   [  --enable-iniphile       Enable "iniphile" extension support]
 )
 
