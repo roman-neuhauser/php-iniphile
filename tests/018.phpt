@@ -16,6 +16,9 @@ c($ini, 'first.first');
 c($ini, 'first.second');
 c($ini, 'first.third');
 echo "\n";
+c($ini, 'urls.urls');
+c($ini, 'urls.emails');
+echo "\n";
 c($ini, 'second.empty');
 c($ini, 'second.emptywithcomment1');
 c($ini, 'second.emptywithcomment2');
@@ -34,6 +37,19 @@ array(1) {
 array(1) {
   [0]=>
   string(15) "everything else"
+}
+
+array(2) {
+  [0]=>
+  string(48) "http://localhost/foo.bar?foo=bar&qus=rofl%20lmao"
+  [1]=>
+  string(9) "foo://bar"
+}
+array(2) {
+  [0]=>
+  string(20) "foo+bar#baz@qux.tld."
+  [1]=>
+  string(11) "foo@bar.baz"
 }
 
 array(0) {
