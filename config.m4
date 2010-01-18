@@ -15,19 +15,26 @@ if test $PHP_INIPHILE != no; then
   PHP_SUBST(INIPHILE_SHARED_LIBADD)
   PHP_ADD_LIBRARY(stdc++, 1, INIPHILE_SHARED_LIBADD)
   if test "x$PHP_BOOST" != "xno"; then
-    if test -e $PHP_BOOST/include/boost/spirit.hpp; then
-      INIPHILE_BOOST_INCLUDE=$PHP_BOOST/include
-    fi
-  else
-    for path in /usr/local /usr; do
-      if test -e $path/include/boost/spirit.hpp; then
-        INIPHILE_BOOST_INCLUDE=$path/include
-        break
+    for sub in "" include; do
+      if test -e $PHP_BOOST/$sub/boost/spirit.hpp; then
+        INIPHILE_BOOST_INCLUDE=$PHP_BOOST/$sub
+        break;
       fi
     done
+  else
+    for path in /usr/local /usr; do
+      for sub in "" include; do
+        if test -e $path/$sub/boost/spirit.hpp; then
+          INIPHILE_BOOST_INCLUDE=$path/$sub
+          break;
+        fi
+      done
+    done
   fi
-  if test -z "$INIPHILE_BOOST_INCLUDE"; then
-    AC_MSG_ERROR([$PHP_BOOST/include/boost/spirit.hpp not found, try again --with-boost=DIR])
+  if test -d "$INIPHILE_BOOST_INCLUDE"; then
+    :
+  else
+    AC_MSG_ERROR([boost/spirit.hpp not found, try again --with-boost=DIR])
   fi
   PHP_ADD_INCLUDE($INIPHILE_BOOST_INCLUDE)
   PHP_NEW_EXTENSION(iniphile, php_iniphile.cpp iniphile.cpp, $ext_shared)
