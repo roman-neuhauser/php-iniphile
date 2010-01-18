@@ -33,7 +33,7 @@ struct phpini
 
 #define PHPINI_EH_DECL zend_error_handling error_handling
 #define PHPINI_EH_THROWING \
-	zend_replace_error_handling( \
+    zend_replace_error_handling( \
         EH_THROW \
       , NULL \
       , &error_handling TSRMLS_CC \
@@ -44,7 +44,7 @@ struct phpini
 
 #define PHPINI_EH_DECL
 #define PHPINI_EH_THROWING \
-	php_set_error_handling( \
+    php_set_error_handling( \
         EH_THROW \
       , zend_exception_get_default(TSRMLS_C) TSRMLS_CC \
     )
