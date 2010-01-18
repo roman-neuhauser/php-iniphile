@@ -117,7 +117,7 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
 
 static
 void
-phpini_convert_to_string(zval *dst, zval *src) // {{{
+phpini_convert_to_string(zval *dst, zval *src TSRMLS_DC) // {{{
 {
     *dst = *src;
     zval_copy_ctor(dst);
@@ -130,7 +130,7 @@ phpini_convert_to_string(zval *dst, zval *src) // {{{
 
 static
 void
-get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
+get_strings(zval *dst, zval const *src, phpini *obj, char const *path TSRMLS_DC) // {{{
 {
     typedef std::vector<std::string> Strings;
     zval **elm;
@@ -144,7 +144,7 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path) // {{{
         zend_hash_move_forward_ex(hash, &i)
     ) {
         zval temp;
-        phpini_convert_to_string(&temp, *elm);
+        phpini_convert_to_string(&temp, *elm TSRMLS_CC);
         dv.push_back(Z_STRVAL(temp));
     }
     Strings rv(obj->impl->get(path, dv));
@@ -229,11 +229,11 @@ PHP_METHOD(iniphile, get) // {{{
         RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(dflt))).c_str()), 0);
     case IS_OBJECT: {
         zval temp;
-        phpini_convert_to_string(&temp, dflt);
+        phpini_convert_to_string(&temp, dflt TSRMLS_CC);
         RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL(temp))).c_str()), 0);
     }
     case IS_ARRAY:
-        get_strings(return_value, dflt, obj, path);
+        get_strings(return_value, dflt, obj, path TSRMLS_CC);
         break;
     default:
         PHPINI_THROW("Unsupported value type");
