@@ -117,19 +117,6 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
 
 static
 void
-phpini_convert_to_string(zval *dst, zval *src TSRMLS_DC) // {{{
-{
-    *dst = *src;
-    zval_copy_ctor(dst);
-    PHPINI_EH_DECL;
-
-    PHPINI_EH_THROWING;
-    convert_to_string(dst);
-    PHPINI_EH_NORMAL;
-} // }}}
-
-static
-void
 get_strings(zval *dst, zval const *src, phpini *obj, char const *path TSRMLS_DC) // {{{
 {
     typedef std::vector<std::string> Strings;
@@ -143,9 +130,13 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path TSRMLS_DC)
         SUCCESS == zend_hash_get_current_data_ex(hash, (void**) &elm, &i);
         zend_hash_move_forward_ex(hash, &i)
     ) {
-        zval temp;
-        phpini_convert_to_string(&temp, *elm TSRMLS_CC);
-        dv.push_back(Z_STRVAL(temp));
+        zval tmp;
+        int use_copy;
+        zend_make_printable_zval(*elm, &tmp, &use_copy);
+        dv.push_back(Z_STRVAL(use_copy ? tmp : **elm));
+        if (use_copy) {
+            zval_dtor(&tmp);
+        }
     }
     Strings rv(obj->impl->get(path, dv));
     array_init(dst);
@@ -228,12 +219,23 @@ PHP_METHOD(iniphile, get) // {{{
     case IS_STRING:
         RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(dflt))).c_str()), 0);
     case IS_OBJECT: {
-        zval temp;
-        phpini_convert_to_string(&temp, dflt TSRMLS_CC);
-        RETURN_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL(temp))).c_str()), 0);
+        zval tmp;
+        int use_copy;
+
+        PHPINI_EH_THROWING;
+        zend_make_printable_zval(dflt, &tmp, &use_copy);
+        PHPINI_EH_NORMAL;
+        zval* str(use_copy ? &tmp : dflt);
+        RETVAL_STRING(estrdup(obj->impl->get(path, std::string(Z_STRVAL_P(str))).c_str()), 0);
+        if (use_copy) {
+            zval_dtor(str);
+        }
+        break;
     }
     case IS_ARRAY:
+        PHPINI_EH_THROWING;
         get_strings(return_value, dflt, obj, path TSRMLS_CC);
+        PHPINI_EH_NORMAL;
         break;
     default:
         PHPINI_THROW("Unsupported value type");
