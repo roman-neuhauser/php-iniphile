@@ -1,5 +1,5 @@
 --TEST--
-construction with nonexistent path throws
+construction with nonexistent path throws iniphile_error
 --SKIPIF--
 <?php if (!extension_loaded("iniphile")) print "skip"; ?>
 --FILE--
@@ -7,7 +7,7 @@ construction with nonexistent path throws
 
 try {
     $ini = new iniphile(dirname(__FILE__) . "/nonexistent");
-} catch (Exception $e) {
+} catch (iniphile_error $e) {
     echo "ok";
 }
 

@@ -8,6 +8,7 @@
 #include "zend_exceptions.h"
 
 zend_class_entry *iniphile_ce;
+zend_class_entry *iniphile_error_ce;
 zend_object_handlers iniphile_object_handlers;
 
 struct phpini
@@ -24,7 +25,7 @@ struct phpini
 
 #define PHPINI_THROW(m) \
     zend_throw_exception( \
-        zend_exception_get_default(TSRMLS_C) \
+        iniphile_error_ce \
       , m \
       , 0 TSRMLS_CC \
     );
@@ -168,14 +169,14 @@ PHP_METHOD(iniphile, __construct) // {{{
         obj->impl = new iniphile_bridge(path);
     } catch (iniphile_errors::stream_error &e) {
         zend_throw_exception_ex(
-            zend_exception_get_default(TSRMLS_C)
+            iniphile_error_ce
           , 0 TSRMLS_CC
           , "'%s' could not be open"
           , path
         );
     } catch (iniphile_errors::syntax_error &e) {
         zend_throw_exception_ex(
-            zend_exception_get_default(TSRMLS_C)
+            iniphile_error_ce
           , 0 TSRMLS_CC
           , "Syntax error in '%s': %s"
           , path
@@ -250,9 +251,23 @@ function_entry iniphile_methods[] = // {{{
     {0, 0, 0}
 }; // }}}
 
+function_entry iniphile_exception_methods[] = // {{{
+{
+    {0, 0, 0}
+}; // }}}
+
 PHP_MINIT_FUNCTION(iniphile) // {{{
 {
     zend_class_entry ce;
+
+    INIT_CLASS_ENTRY(ce, "iniphile_error", iniphile_exception_methods);
+    iniphile_error_ce = zend_register_internal_class_ex(
+        &ce
+      , zend_exception_get_default(TSRMLS_C)
+      , NULL
+      TSRMLS_CC
+    );
+
     INIT_CLASS_ENTRY(ce, "iniphile", iniphile_methods);
     iniphile_ce = zend_register_internal_class(&ce TSRMLS_CC);
     iniphile_ce->create_object = &iniphile_create_handler;
