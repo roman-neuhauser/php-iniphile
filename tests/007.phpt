@@ -11,6 +11,7 @@ error_reporting(error_reporting() & ~E_NOTICE);
 
 try {
     $ini->get("nonexistent", new stdclass);
+    echo "bug";
 } catch (Exception $e) {
     echo "ok";
 }

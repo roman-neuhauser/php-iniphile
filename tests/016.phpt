@@ -11,6 +11,7 @@ $ini = new iniphile(dirname(__FILE__) . "/empty.ini");
 
 try {
     $ini->get("nonexistent", new stdclass);
+    echo "bug";
 } catch (Exception $e) {
     echo "ok";
 }
