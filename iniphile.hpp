@@ -10,33 +10,7 @@
 #include <exception>
 
 #include "iniphile/astfwd.hpp"
-
-namespace iniphile_errors
-{
-
-struct
-stream_error
-: public virtual std::exception
-{
-    stream_error(std::string const &msg);
-    virtual ~stream_error() throw();
-    virtual char const *what() const throw();
-private:
-    std::string const msg;
-};
-
-struct
-syntax_error
-: public virtual std::exception
-{
-    syntax_error(std::string const &msg);
-    virtual ~syntax_error() throw();
-    virtual char const *what() const throw();
-private:
-    std::string const msg;
-};
-
-} // namespace iniphile_errors
+#include "errors.hpp"
 
 struct iniphile_bridge
 {

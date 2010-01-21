@@ -9,34 +9,7 @@
 #include "iniphile/ast.hpp"
 #include "iniphile/output.hpp"
 
-namespace iniphile_errors
-{
-
-stream_error::stream_error(std::string const &msg)
-: msg(msg)
-{}
-
-char const *
-stream_error::what() const throw()
-{
-    return msg.c_str();
-}
-
-stream_error::~stream_error() throw() {}
-
-syntax_error::syntax_error(std::string const &msg)
-: msg(msg)
-{}
-
-char const *
-syntax_error::what() const throw()
-{
-    return msg.c_str();
-}
-
-syntax_error::~syntax_error() throw() {}
-
-} // namespace iniphile_errors
+#include "errors.hpp"
 
 iniphile_bridge::iniphile_bridge(std::string const path)
 : src(path)
