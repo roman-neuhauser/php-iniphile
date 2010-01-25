@@ -19,6 +19,8 @@ echo "\n";
 c($ini, 'urls.urls');
 c($ini, 'urls.emails');
 echo "\n";
+c($ini, 'spaces.space');
+echo "\n";
 c($ini, 'second.empty');
 c($ini, 'second.emptywithcomment1');
 c($ini, 'second.emptywithcomment2');
@@ -50,6 +52,11 @@ array(2) {
   string(20) "foo+bar#baz@qux.tld."
   [1]=>
   string(11) "foo@bar.baz"
+}
+
+array(1) {
+  [0]=>
+  string(7) "odyssey"
 }
 
 array(0) {
