@@ -10,7 +10,7 @@ if (PHP_INIPHILE != "no") {
   }
   EXTENSION(
     "iniphile"
-  , "php_iniphile.cpp iniphile.cpp"
+  , "php_iniphile.cpp iniphile.cpp errors.cpp"
   , null
   , '/EHsc'
   );

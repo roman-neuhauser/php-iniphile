@@ -37,7 +37,7 @@ if test $PHP_INIPHILE != no; then
     AC_MSG_ERROR([boost/spirit.hpp not found, try again --with-boost=DIR])
   fi
   PHP_ADD_INCLUDE($INIPHILE_BOOST_INCLUDE)
-  PHP_NEW_EXTENSION(iniphile, php_iniphile.cpp iniphile.cpp, $ext_shared)
+  PHP_NEW_EXTENSION(iniphile, php_iniphile.cpp iniphile.cpp errors.cpp, $ext_shared)
 fi
 
 dnl vim: sw=2 sts=2 et fdm=marker cms=\ #\ %s
