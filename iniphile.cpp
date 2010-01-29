@@ -49,7 +49,7 @@ iniphile_bridge::get(std::string const query, T dflt)
 }
 
 #define INIPHILE_BRIDGE_GET_SPEC(T) \
-    template T iniphile_bridge::get< T >(std::string const query, T dflt);
+    template T iniphile_bridge::get< T >(std::string const query, T dflt)
 
 INIPHILE_BRIDGE_GET_SPEC(std::vector<std::string>);
 INIPHILE_BRIDGE_GET_SPEC(std::string);
