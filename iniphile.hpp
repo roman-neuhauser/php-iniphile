@@ -26,7 +26,6 @@ struct iniphile_bridge
 private:
     std::string const src;
     iniphile::ast::node *afg;
-    bool open_;
 };
 
 #endif // INIPHILE_HPP
