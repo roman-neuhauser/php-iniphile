@@ -14,6 +14,27 @@ if test $PHP_INIPHILE != no; then
   PHP_REQUIRE_CXX()
   PHP_SUBST(INIPHILE_SHARED_LIBADD)
   PHP_ADD_LIBRARY(stdc++, 1, INIPHILE_SHARED_LIBADD)
+
+  iniphile_canary=include/iniphile/astfwd.hpp
+  if test -r $PHP_INIPHILE/$iniphile_canary; then
+    INIPHILE_DIR=$PHP_INIPHILE
+  else
+    AC_MSG_CHECKING(for Iniphile in default path)
+    for i in /usr/local /usr; do
+      if test -r $i/$iniphile_canary; then
+        INIPHILE_DIR=$i
+        AC_MSG_RESULT(found in $i)
+        break
+      fi
+    done
+  fi
+  if test -z "$INIPHILE_DIR"; then
+    AC_MSG_RESULT(not found)
+    AC_MSG_ERROR(Please reinstall the Iniphile C++ library)
+  else
+    PHP_ADD_INCLUDE($INIPHILE_DIR/include)
+    PHP_ADD_LIBRARY_WITH_PATH(iniphile, $INIPHILE_DIR/$PHP_LIBDIR, INIPHILE_SHARED_LIBADD)
+  fi
   if test "x$PHP_BOOST" != "xno"; then
     for sub in "" include; do
       if test -e $PHP_BOOST/$sub/boost/spirit.hpp; then
