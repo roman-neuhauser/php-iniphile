@@ -1,13 +1,13 @@
 PHP_ARG_WITH(
-  boost,
+  boost-dir,
   [for Boost C++ libraries],
-  [  --with-boost       Boost C++ libraries],
+  [  --with-boost-dir=DIR    INIPHILE: Boost install prefix],
   [$prefix]
 )
-PHP_ARG_ENABLE(
+PHP_ARG_WITH(
   iniphile,
-  [whether to enable the iniphile extension],
-  [  --enable-iniphile       Enable "iniphile" extension support]
+  [for iniphile support],
+  [  --with-iniphile[=DIR]   Include iniphile support]
 )
 
 if test $PHP_INIPHILE != no; then
@@ -35,10 +35,11 @@ if test $PHP_INIPHILE != no; then
     PHP_ADD_INCLUDE($INIPHILE_DIR/include)
     PHP_ADD_LIBRARY_WITH_PATH(iniphile, $INIPHILE_DIR/$PHP_LIBDIR, INIPHILE_SHARED_LIBADD)
   fi
-  if test "x$PHP_BOOST" != "xno"; then
+
+  if test "x$PHP_BOOST_DIR" != "xno"; then
     for sub in "" include; do
-      if test -e $PHP_BOOST/$sub/boost/spirit.hpp; then
-        INIPHILE_BOOST_INCLUDE=$PHP_BOOST/$sub
+      if test -e $PHP_BOOST_DIR/$sub/boost/spirit.hpp; then
+        INIPHILE_BOOST_INCLUDE=$PHP_BOOST_DIR/$sub
         break;
       fi
     done
@@ -52,12 +53,14 @@ if test $PHP_INIPHILE != no; then
       done
     done
   fi
+
   if test -d "$INIPHILE_BOOST_INCLUDE"; then
     :
   else
-    AC_MSG_ERROR([boost/spirit.hpp not found, try again --with-boost=DIR])
+    AC_MSG_ERROR([boost/spirit.hpp not found, try again --with-boost-dir=DIR])
   fi
   PHP_ADD_INCLUDE($INIPHILE_BOOST_INCLUDE)
+
   PHP_NEW_EXTENSION(iniphile, php_iniphile.cpp iniphile.cpp errors.cpp, $ext_shared)
 fi
 
