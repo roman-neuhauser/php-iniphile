@@ -1,4 +1,4 @@
-ARG_ENABLE(
+ARG_WITH(
   "iniphile"
 , "iniphile extension"
 , "yes"
