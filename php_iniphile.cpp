@@ -2,7 +2,9 @@
 // Distributed under the MIT license (see LICENSE file)
 // vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
 
-#include "php_iniphile.hpp"
+extern "C" {
+#include "php_iniphile.h"
+}
 #include "iniphile.hpp"
 
 #include "zend_exceptions.h"

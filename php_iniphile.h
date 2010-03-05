@@ -12,9 +12,7 @@
 #include "config.h"
 #endif
 
-extern "C" {
 #include "php.h"
-}
 
 extern zend_module_entry iniphile_module_entry;
 #define phpext_iniphile_ptr &iniphile_module_entry
