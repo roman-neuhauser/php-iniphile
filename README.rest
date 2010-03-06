@@ -1,0 +1,45 @@
+=============================================================================
+                                Iniphile/PHP
+=============================================================================
+-----------------------------------------------------------------------------
+                    PHP binding for the Iniphile library
+-----------------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+
+.. contents::
+
+Introduction
+============
+
+Iniphile/PHP is a PHP_ binding for the Iniphile library.  It is known to work
+with PHP 5.2.11, 5.2.12 and 5.3.1 on FreeBSD 9, and on Windows XP with Visual
+Studio 9.
+
+.. _PHP: http://www.php.net/
+
+Downloads
+=========
+
+Repository
+++++++++++
+
+The latest source can be checked out from the Mercurial_ repository_.
+
+.. _Mercurial: http://selenic.com/mercurial/
+.. _repository: https://hg.sigpipe.cz/
+
+Official tarballs
++++++++++++++++++
+
+All Iniphile/PHP releases can be found in the `download directory`_.
+
+.. _download directory: http://codex.sigpipe.cz/php-iniphile/dist/
+
+
+.. target-notes::
+.. section-numbering::
+
+.. vim: ft=rst sts=2 sw=2 tw=77
