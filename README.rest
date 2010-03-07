@@ -32,26 +32,35 @@ Prerequisities
 Reference
 =========
 
+class iniphile
+++++++++++++++
+
 ::
 
   class iniphile
   {
       __construct(string $path);
-        bool get(string $query,   bool $default);
-       float get(string $query,  float $default);
-         int get(string $query,    int $default);
+      array  get(string $query, array  $default);
+      bool   get(string $query, bool   $default);
+      float  get(string $query, float  $default);
+      int    get(string $query, int    $default);
       string get(string $query, string $default);
-       array get(string $query,  array $default);
   }
+
+iniphile::__construct
+~~~~~~~~~~~~~~~~~~~~~
 
 ``iniphile::__construct`` takes a single argument, a file ``$path``.  Upon
 successful completion, ``$path`` has been parsed.  Throws ``iniphile_error``
 if ``$path`` doesn't exist or if it's not an INI file.
 
+iniphile::get
+~~~~~~~~~~~~~
+
 ``iniphile::get`` takes two arguments, string ``$query``, and ``$default``
-which may be ``bool``, ``float``, ``int``, ``string`` (or an object which
-implements the ``__toString`` method) or ``array``.  It returns a value of
-the same type as the second argument.
+which may be ``array`` ``bool``, ``float``, ``int``, ``string`` (or an object
+which implements the ``__toString`` method) or.  It returns a value of the
+same type as the second argument.
 
 Throws ``iniphile_error`` if called with a wrong number of arguments or if
 the second argument isn't of one of the allowed types.
