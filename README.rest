@@ -32,6 +32,14 @@ Prerequisities
 Reference
 =========
 
+INI file syntax
++++++++++++++++
+
+See the `INI file syntax`_ section in the Iniphile documentation.
+
+.. _INI file syntax: http://codex.sigpipe.cz/iniphile/#ini-file-syntax
+
+
 class iniphile
 ++++++++++++++
 
@@ -64,6 +72,13 @@ same type as the second argument.
 
 Throws ``iniphile_error`` if called with a wrong number of arguments or if
 the second argument isn't of one of the allowed types.
+
+See the Iniphile documentation for a complete description of
+`iniphile::get<T>`_.
+
+.. _iniphile::get<T>:
+   http://codex.sigpipe.cz/iniphile/#t-get-t-ast-node-std-string-t
+
 
 
 Downloads
