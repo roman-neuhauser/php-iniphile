@@ -5,7 +5,11 @@ ARG_WITH(
 );
 
 if (PHP_INIPHILE != "no") {
-  if (!CHECK_HEADER_ADD_INCLUDE('boost/spirit.hpp', 'CFLAGS_INIPHILE')) {
+  var ok =
+      CHECK_HEADER_ADD_INCLUDE('boost/spirit.hpp', 'CFLAGS_INIPHILE')
+   && CHECK_LIB('libiniphile.a;libiniphile.lib', 'iniphile', PHP_INIPHILE)
+  ;
+  if (!ok) {
     ERROR('The INIPHILE extension requires Boost C++ libraries.');
   }
   EXTENSION(
