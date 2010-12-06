@@ -186,11 +186,6 @@ PHP_METHOD(iniphile, __construct) // {{{
         );
     }
 } // }}}
-PHP_METHOD(iniphile, path) // {{{
-{
-    phpini *obj = PHPTHIS();
-    RETURN_STRING(estrdup(obj->impl->path().c_str()), 0);
-} // }}}
 PHP_METHOD(iniphile, get) // {{{
 {
     phpini *obj = PHPTHIS();
@@ -248,7 +243,6 @@ PHP_METHOD(iniphile, get) // {{{
 function_entry iniphile_methods[] = // {{{
 {
     PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME(iniphile, path, 0, ZEND_ACC_PUBLIC)
     PHP_ME(iniphile, get, 0, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}

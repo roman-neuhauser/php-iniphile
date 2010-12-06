@@ -17,8 +17,6 @@ struct iniphile_bridge
     explicit
     iniphile_bridge(std::string const path);
     ~iniphile_bridge();
-    std::string const
-    path();
 
     template<class T>
     T

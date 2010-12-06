@@ -36,12 +36,6 @@ iniphile_bridge::~iniphile_bridge()
         delete afg;
 }
 
-std::string const
-iniphile_bridge::path()
-{
-    return src;
-}
-
 template<class T>
 T
 iniphile_bridge::get(std::string const query, T dflt)
