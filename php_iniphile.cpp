@@ -240,10 +240,25 @@ PHP_METHOD(iniphile, get) // {{{
     }
 } // }}}
 
+#define INIPHILE_BEGIN_ARG_INFO(method, argc) \
+    ZEND_BEGIN_ARG_INFO_EX(arginfo_iniphile##method, 0, 0, argc)
+
+INIPHILE_BEGIN_ARG_INFO(__construct, 1)
+    ZEND_ARG_INFO(0, path)
+ZEND_END_ARG_INFO()
+
+INIPHILE_BEGIN_ARG_INFO(get, 2)
+    ZEND_ARG_INFO(0, path)
+    ZEND_ARG_INFO(0, dflt)
+ZEND_END_ARG_INFO()
+
+#define INIPHILE_ME(method, acc) \
+    PHP_ME(iniphile, method, arginfo_iniphile##method, acc)
+
 function_entry iniphile_methods[] = // {{{
 {
-    PHP_ME(iniphile, __construct, 0, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME(iniphile, get, 0, ZEND_ACC_PUBLIC)
+    INIPHILE_ME(__construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    INIPHILE_ME(get, ZEND_ACC_PUBLIC)
     {0, 0, 0}
 }; // }}}
 
