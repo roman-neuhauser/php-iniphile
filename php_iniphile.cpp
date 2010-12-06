@@ -2,12 +2,29 @@
 // Distributed under the MIT license (see LICENSE file)
 // vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
 
+#include <sstream>
+#include <fstream>
+
 extern "C" {
 #include "php_iniphile.h"
 }
 #include "iniphile.hpp"
 
 #include "zend_exceptions.h"
+
+iniphile_bridge*
+parse_string(std::string const &syn)
+{
+    std::istringstream input(syn);
+    return new iniphile_bridge(input, "(input)");
+}
+
+iniphile_bridge*
+parse_file(std::string const &path)
+{
+    std::ifstream input(path.c_str(), std::ios_base::binary);
+    return new iniphile_bridge(input, path);
+}
 
 zend_class_entry *iniphile_ce;
 zend_class_entry *iniphile_error_ce;
@@ -168,7 +185,7 @@ PHP_METHOD(iniphile, __construct) // {{{
 
     phpini *obj = PHPTHIS();
     try {
-        obj->impl = new iniphile_bridge(path);
+        obj->impl = parse_file(path);
     } catch (iniphile_errors::stream_error &e) {
         zend_throw_exception_ex(
             iniphile_error_ce

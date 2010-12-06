@@ -2,7 +2,7 @@
 // Distributed under the MIT license (see LICENSE file)
 // vim: sw=4 sts=4 et fdm=marker cms=\ //\ %s
 
-#include <fstream>
+#include <istream>
 #include <sstream>
 
 #include "iniphile.hpp"
@@ -12,12 +12,13 @@
 
 #include "errors.hpp"
 
-iniphile_bridge::iniphile_bridge(std::string const path)
-: src(path)
+iniphile_bridge::iniphile_bridge(
+    std::istream& input
+  , std::string const &desc
+)
 {
-    std::ifstream input(path.c_str(), std::ios_base::binary);
     if (!input)
-        throw iniphile_errors::stream_error(path);
+        throw iniphile_errors::stream_error(desc);
     input.unsetf(std::ios::skipws);
 
     std::ostringstream erros;

@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <istream>
 
 #include "iniphile/astfwd.hpp"
 #include "errors.hpp"
@@ -15,15 +16,20 @@
 struct iniphile_bridge
 {
     explicit
-    iniphile_bridge(std::string const path);
+    iniphile_bridge(std::istream& input, std::string const& desc);
     ~iniphile_bridge();
 
     template<class T>
     T
     get(std::string const query, T dflt);
 private:
-    std::string const src;
     iniphile::ast::node *afg;
 };
+
+iniphile_bridge*
+parse_string(std::string const &input);
+
+iniphile_bridge*
+parse_file(std::string const &path);
 
 #endif // INIPHILE_HPP
