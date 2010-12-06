@@ -14,9 +14,19 @@
 Introduction
 ============
 
-Iniphile/PHP is a PHP_ binding for the Iniphile_ library.  It is known to work
-with PHP 5.2.11, 5.2.12, 5.3.1 and 5.3.2 on FreeBSD 9, and on Windows XP with
-Visual Studio 9.
+Iniphile/PHP is a PHP_ binding for the Iniphile_ library.
+
+Compatibility
+=============
+
+Iniphile/PHP has been used, and is expected to work in the following
+environments:
+
+:PHP: 5.2.11, 5.2.12, 5.3.1, 5.3.2, 5.3.3
+:OS: FreeBSD 9, Windows XP, Vista, 7, 2003 Server, 2008 Server R2
+:Compiler: GCC 4.2, 4.3, 4.4, 4.5, VS 2008 Express
+
+PHP 5.2 support is falling behind.
 
 .. _PHP: http://www.php.net/
 .. _Iniphile: http://codex.sigpipe.cz/iniphile/
