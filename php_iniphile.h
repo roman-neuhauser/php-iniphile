@@ -6,7 +6,7 @@
 #define PHP_INIPHILE_HPP
 
 #define PHP_INIPHILE_EXTNAME "iniphile"
-#define PHP_INIPHILE_EXTVER "0.0"
+#define PHP_INIPHILE_EXTVER "0.2"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
