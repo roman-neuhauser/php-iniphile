@@ -37,10 +37,12 @@ struct phpini
     iniphile_bridge *impl;
 }; // }}}
 
-#define PHPTHIS() \
+#define PHPINI(o) \
     static_cast<phpini *>( \
-        zend_object_store_get_object(getThis() TSRMLS_CC) \
+        zend_object_store_get_object(o TSRMLS_CC) \
     )
+
+#define PHPTHIS() PHPINI(getThis())
 
 #define PHPINI_THROW(m) \
     zend_throw_exception( \
@@ -165,47 +167,80 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path TSRMLS_DC)
     }
 } // }}}
 
-PHP_METHOD(iniphile, __construct) // {{{
+static
+void
+instantiate(zval *o) // {{{
 {
-    char *path;
-    int pathlen;
-    PHPINI_EH_DECL;
-
-    PHPINI_EH_THROWING;
-    if (FAILURE == zend_parse_parameters(
-        ZEND_NUM_ARGS() TSRMLS_CC
-      , "s"
-      , &path
-      , &pathlen
-    )) {
-        PHPINI_EH_NORMAL;
-        return;
-    }
-    PHPINI_EH_NORMAL;
-
-    phpini *obj = PHPTHIS();
+    Z_TYPE_P(o) = IS_OBJECT;
+    object_init_ex(o, iniphile_ce);
+    Z_SET_REFCOUNT_P(o, 1);
+    Z_UNSET_ISREF_P(o);
+} // }}}
+static
+void
+initialize(phpini *obj, char const *src, bool is_path TSRMLS_DC) // {{{
+{
     try {
-        obj->impl = parse_file(path);
-    } catch (iniphile_errors::stream_error &e) {
+        obj->impl = is_path ? parse_file(src) : parse_string(src);
+    } catch (iniphile_errors::stream_error) {
         zend_throw_exception_ex(
             iniphile_error_ce
           , 0 TSRMLS_CC
           , "'%s' could not be open"
-          , path
+          , src
         );
     } catch (iniphile_errors::syntax_error &e) {
         zend_throw_exception_ex(
             iniphile_error_ce
           , 0 TSRMLS_CC
           , "Syntax error in '%s': %s"
-          , path
+          , src
           , e.what()
         );
     }
 } // }}}
+static
+char *
+get_arg(int argc TSRMLS_DC) // {{{
+{
+    char *src;
+    int srclen;
+    PHPINI_EH_DECL;
+
+    PHPINI_EH_THROWING;
+    if (FAILURE == zend_parse_parameters(
+        argc TSRMLS_CC
+      , "s"
+      , &src
+      , &srclen
+    )) {
+        PHPINI_EH_NORMAL;
+        return 0;
+    }
+    PHPINI_EH_NORMAL;
+    return src;
+} // }}}
+#define CREATE_INIPHILE(o, ctor, is_path) \
+    char *src = get_arg(ZEND_NUM_ARGS() TSRMLS_CC); \
+    if (!src) RETURN_NULL(); \
+    if (!ctor) instantiate(o TSRMLS_CC); \
+    initialize(PHPINI(o), src, is_path TSRMLS_CC);
+
+PHP_METHOD(iniphile, __construct) // {{{
+{
+    CREATE_INIPHILE(getThis(), true, true)
+} // }}}
+PHP_METHOD(iniphile, from_file) // {{{
+{
+    CREATE_INIPHILE(return_value, false, true)
+} // }}}
+PHP_METHOD(iniphile, from_string) // {{{
+{
+    CREATE_INIPHILE(return_value, false, false)
+} // }}}
 PHP_METHOD(iniphile, get) // {{{
 {
-    phpini *obj = PHPTHIS();
+    phpini *obj = PHPINI(getThis());
     char *path;
     int path_len;
     zval *dflt;
@@ -261,7 +296,15 @@ PHP_METHOD(iniphile, get) // {{{
     ZEND_BEGIN_ARG_INFO_EX(arginfo_iniphile##method, 0, 0, argc)
 
 INIPHILE_BEGIN_ARG_INFO(__construct, 1)
+    ZEND_ARG_INFO(0, input)
+ZEND_END_ARG_INFO()
+
+INIPHILE_BEGIN_ARG_INFO(from_file, 1)
     ZEND_ARG_INFO(0, path)
+ZEND_END_ARG_INFO()
+
+INIPHILE_BEGIN_ARG_INFO(from_string, 1)
+    ZEND_ARG_INFO(0, syntax)
 ZEND_END_ARG_INFO()
 
 INIPHILE_BEGIN_ARG_INFO(get, 2)
@@ -276,6 +319,8 @@ function_entry iniphile_methods[] = // {{{
 {
     INIPHILE_ME(__construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     INIPHILE_ME(get, ZEND_ACC_PUBLIC)
+    INIPHILE_ME(from_file, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    INIPHILE_ME(from_string, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     {0, 0, 0}
 }; // }}}
 

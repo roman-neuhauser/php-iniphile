@@ -57,6 +57,9 @@ class iniphile
 
   class iniphile
   {
+      static iniphile from_string(string $syntax);
+      static iniphile from_file(string $path);
+
       __construct(string $path);
       array  get(string $query, array  $default);
       bool   get(string $query, bool   $default);
@@ -65,12 +68,26 @@ class iniphile
       string get(string $query, string $default);
   }
 
+iniphile::from_string
+~~~~~~~~~~~~~~~~~~~~~
+
+``iniphile::from_string`` takes a single argument, a string ``$syntax``
+conforming to the `INI file syntax`_.  Returns an ``iniphile`` instance.
+Throws ``iniphile_error`` if parsing failed.
+
+iniphile::from_file
+~~~~~~~~~~~~~~~~~~~
+
+``iniphile::from_file`` takes a single argument, a file ``$path``.
+Returns an ``iniphile`` instance.  Throws ``iniphile_error``
+if ``$path`` doesn't exist or parsing failed.
+
 iniphile::__construct
 ~~~~~~~~~~~~~~~~~~~~~
 
 ``iniphile::__construct`` takes a single argument, a file ``$path``.  Upon
 successful completion, ``$path`` has been parsed.  Throws ``iniphile_error``
-if ``$path`` doesn't exist or if it's not an INI file.
+if ``$path`` doesn't exist or parsing failed.
 
 iniphile::get
 ~~~~~~~~~~~~~
