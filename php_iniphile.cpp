@@ -162,7 +162,7 @@ get_strings(zval *dst, zval const *src, phpini *obj, char const *path TSRMLS_DC)
     }
     Strings rv(obj->impl->get(path, dv));
     array_init(dst);
-    for (int i = 0; i < rv.size(); ++i) {
+    for (std::size_t i = 0; i < rv.size(); ++i) {
         add_next_index_string(dst, estrdup(rv[i].c_str()), 0);
     }
 } // }}}
