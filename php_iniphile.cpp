@@ -33,7 +33,7 @@ zend_object_handlers iniphile_object_handlers;
 struct phpini
 // {{{
 {
-    zend_object std;
+    zend_object zob;
     iniphile_bridge *impl;
 }; // }}}
 
@@ -80,8 +80,8 @@ iniphile_free_storage(void *object TSRMLS_DC) // {{{
     phpini *obj = static_cast<phpini *>(object);
     delete obj->impl;
 
-    zend_hash_destroy(obj->std.properties);
-    FREE_HASHTABLE(obj->std.properties);
+    zend_hash_destroy(obj->zob.properties);
+    FREE_HASHTABLE(obj->zob.properties);
 
     efree(obj);
 } // }}}
@@ -124,7 +124,7 @@ iniphile_create_handler(zend_class_entry *type TSRMLS_DC) // {{{
     );
     memset(obj, 0, sizeof(phpini));
 
-    zend_object *zob(&obj->std);
+    zend_object *zob(&obj->zob);
 
     init(zob, type TSRMLS_CC);
     zend_object_value retval;
