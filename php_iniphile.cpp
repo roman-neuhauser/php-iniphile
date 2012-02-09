@@ -101,6 +101,9 @@ init(zend_object *zob, zend_class_entry *type TSRMLS_DC) // {{{
       , 0
     );
 
+#if ZEND_MODULE_API_NO >= 20100409
+    object_properties_init(zob, zob->ce);
+#else
     zval *tmp;
 
     zend_hash_copy(
@@ -110,7 +113,7 @@ init(zend_object *zob, zend_class_entry *type TSRMLS_DC) // {{{
       , static_cast<void *>(&tmp)
       , sizeof(zval *)
     );
-
+#endif
 } // }}}
 
 zend_object_value
@@ -315,7 +318,7 @@ ZEND_END_ARG_INFO()
 #define INIPHILE_ME(method, acc) \
     PHP_ME(iniphile, method, arginfo_iniphile##method, acc)
 
-function_entry iniphile_methods[] = // {{{
+zend_function_entry iniphile_methods[] = // {{{
 {
     INIPHILE_ME(__construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     INIPHILE_ME(get, ZEND_ACC_PUBLIC)
@@ -324,7 +327,7 @@ function_entry iniphile_methods[] = // {{{
     {0, 0, 0}
 }; // }}}
 
-function_entry iniphile_exception_methods[] = // {{{
+zend_function_entry iniphile_exception_methods[] = // {{{
 {
     {0, 0, 0}
 }; // }}}
