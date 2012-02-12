@@ -93,9 +93,9 @@ iniphile::get
 ~~~~~~~~~~~~~
 
 ``iniphile::get`` takes two arguments, string ``$query``, and ``$default``
-which may be ``array`` ``bool``, ``float``, ``int``, ``string`` (or an object
-which implements the ``__toString`` method) or.  It returns a value of the
-same type as the second argument.
+which may be ``array``, ``bool``, ``float``, ``int``, or ``string``
+(or an object with a ``public string __toString()`` method).
+``iniphile::get`` returns a value of the same type as the second argument.
 
 Throws ``iniphile_error`` if called with a wrong number of arguments or if
 the second argument isn't of one of the allowed types.
