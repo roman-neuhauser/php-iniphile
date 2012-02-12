@@ -22,11 +22,11 @@ Compatibility
 Iniphile/PHP has been used, and is expected to work in the following
 environments:
 
-:PHP: 5.2.11, 5.2.12, 5.3.1, 5.3.2, 5.3.3
+:PHP: 5.3, 5.4
 :OS: FreeBSD 9, Windows XP, Vista, 7, 2003 Server, 2008 Server R2
 :Compiler: GCC 4.2, 4.3, 4.4, 4.5, VS 2008 Express
 
-PHP 5.2 support is falling behind.
+PHP versions prior to 5.3 are not supported.
 
 .. _PHP: http://www.php.net/
 .. _Iniphile: http://codex.sigpipe.cz/iniphile/
