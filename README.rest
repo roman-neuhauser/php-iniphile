@@ -35,7 +35,7 @@ PHP versions prior to 5.3 are not supported.
 Prerequisities
 ==============
 
-* PHP 5.2 or 5.3
+* PHP 5.3 or 5.4
 * C++ compiler (gcc-4.2 or higher; MSVC 9)
 
 
