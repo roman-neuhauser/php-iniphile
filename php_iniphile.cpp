@@ -9,8 +9,10 @@ extern "C" {
 #include "php_iniphile.h"
 }
 #include "iniphile.hpp"
+#include "iniphile/version.hpp"
 
 #include "zend_exceptions.h"
+#include "ext/standard/info.h"
 
 iniphile_bridge*
 parse_string(std::string const &syn)
@@ -357,6 +359,15 @@ PHP_MINIT_FUNCTION(iniphile) // {{{
     return SUCCESS;
 } // }}}
 
+PHP_MINFO_FUNCTION(iniphile) // {{{
+{
+	php_info_print_table_start();
+	php_info_print_table_row(2, "Iniphile/PHP support", "enabled");
+	php_info_print_table_row(2, "Iniphile/PHP version", PHP_INIPHILE_EXTVER);
+	php_info_print_table_row(2, "Iniphile version", INIPHILE_VERSIONSTRING_QUOTED);
+	php_info_print_table_end();
+} // }}}
+
 zend_module_entry iniphile_module_entry = // {{{
 {
     STANDARD_MODULE_HEADER,
@@ -366,7 +377,7 @@ zend_module_entry iniphile_module_entry = // {{{
     0, // MSHUTDOWN
     0, // RINIT
     0, // RSHUTDOWN
-    0, // MINFO
+    PHP_MINFO(iniphile),
     PHP_INIPHILE_EXTVER,
     STANDARD_MODULE_PROPERTIES
 }; // }}}
