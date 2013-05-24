@@ -23,13 +23,13 @@ Iniphile/PHP has been used, and is expected to work in the following
 environments:
 
 :PHP: 5.3, 5.4
-:OS: FreeBSD 9, Windows XP, Vista, 7, 2003 Server, 2008 Server R2
-:Compiler: GCC 4.2, 4.3, 4.4, 4.5, VS 2008 Express
+:OS: FreeBSD 9, OpenSUSE 12.1 - 12.3, Windows XP, Vista, 7, 2003 Server, 2008 Server R2
+:Compiler: GCC 4.2 - 4.7, VS 2008 Express
 
 PHP versions prior to 5.3 are not supported.
 
 .. _PHP: http://www.php.net/
-.. _Iniphile: http://codex.sigpipe.cz/iniphile/
+.. _Iniphile: https://github.com/roman-neuhauser/iniphile/
 
 
 Prerequisities
@@ -47,7 +47,8 @@ INI file syntax
 
 See the `INI file syntax`_ section in the Iniphile documentation.
 
-.. _INI file syntax: http://codex.sigpipe.cz/iniphile/#ini-file-syntax
+.. _INI file syntax:
+   https://github.com/roman-neuhauser/iniphile/#ini-file-syntax
 
 
 class iniphile
@@ -104,7 +105,7 @@ See the Iniphile documentation for a complete description of
 `iniphile::get<T>`_.
 
 .. _iniphile::get<T>:
-   http://codex.sigpipe.cz/iniphile/#t-get-t-ast-node-std-string-t
+   https://github.com/roman-neuhauser/iniphile/#t-get-t-ast-node-std-string-t
 
 
 
@@ -114,17 +115,10 @@ Downloads
 Repository
 ++++++++++
 
-The latest source can be checked out from the Mercurial_ repository_.
+The latest source can be checked out from the Git_ repository_.
 
-.. _Mercurial: http://selenic.com/mercurial/
-.. _repository: https://hg.sigpipe.cz/
-
-Official tarballs
-+++++++++++++++++
-
-All Iniphile/PHP releases can be found in the `download directory`_.
-
-.. _download directory: http://codex.sigpipe.cz/php-iniphile/dist/
+.. _Git: http://git-scm.org/
+.. _repository: https://github.com/roman-neuhauser/php-iniphile/
 
 
 .. target-notes::
