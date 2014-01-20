@@ -23,7 +23,7 @@ iniphile_bridge::iniphile_bridge(
 
     std::ostringstream erros;
     iniphile::parse_result cfg(
-        iniphile::parse(input, erros)
+        iniphile::parse(desc, input, erros)
     );
     if (!cfg)
         throw iniphile_errors::syntax_error(erros.str());
